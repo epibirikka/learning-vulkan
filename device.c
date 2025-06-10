@@ -1,5 +1,7 @@
 #include "device.h"
+
 #include <vulkan/vulkan.h>
+#include <stdio.h>
 
 static int are_features_suitable(VkPhysicalDeviceFeatures features)
 {
@@ -31,14 +33,14 @@ void gpu_debug_device(VkPhysicalDevice device)
     );
 }
 
-static void gpu_debug_devices(VkPhysicalDevice *devices, uint32_t count)
+void gpu_debug_devices(VkPhysicalDevice *devices, uint32_t count)
 {
 
     for (uint32_t idx=0; idx<count; ++idx)
     {
         VkPhysicalDevice device = devices[idx];
         fprintf(stdout, "%s: device %d\n", __func__, idx);
-        debug_device(device);
+        gpu_debug_device(device);
     }
 }
 
