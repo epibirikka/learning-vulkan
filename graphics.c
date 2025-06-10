@@ -1,4 +1,5 @@
 #include "app.h"
+#include "device.h"
 
 #include <vulkan/vulkan.h>
 #include <stdio.h>
@@ -47,64 +48,6 @@ static VkResult create_vk_instance(VkInstance *instance)
     return vkCreateInstance(&create_info, NULL, instance);
 }
 
-static int are_features_suitable(VkPhysicalDeviceFeatures features)
-{
-    return 1;
-}
-
-static void debug_device(VkPhysicalDevice device)
-{
-    static const char *DEVICE_TYPE_NAMES[5] = {
-        "OTHER", "INTEGRATED GPU", "DISCRETE GPU", "VIRTUAL GPU", "CPU",
-    };
-
-    VkPhysicalDeviceProperties properties;
-    vkGetPhysicalDeviceProperties(device, &properties);
-
-    fprintf(
-        stdout,
-        "    [%.*s]\n"
-        "    api version: %d\n"
-        "    driver version: %d\n"
-        "    vendor id: %d\n"
-        "    device type: %s\n"
-        ,
-        VK_MAX_PHYSICAL_DEVICE_NAME_SIZE, properties.deviceName,
-        properties.apiVersion,
-        properties.driverVersion,
-        properties.vendorID,
-        DEVICE_TYPE_NAMES[properties.deviceType]
-    );
-}
-
-static void debug_devices(VkPhysicalDevice *devices, uint32_t count)
-{
-
-    for (uint32_t idx=0; idx<count; ++idx)
-    {
-        VkPhysicalDevice device = devices[idx];
-        fprintf(stdout, "%s: device %d\n", __func__, idx);
-        debug_device(device);
-    }
-}
-
-static VkPhysicalDevice find_suitable_device(VkPhysicalDevice *devices, uint32_t count)
-{
-    for (uint32_t idx=0; idx<count; ++idx)
-    {
-        VkPhysicalDevice device = devices[idx];
-
-        VkPhysicalDeviceFeatures features;
-        vkGetPhysicalDeviceFeatures(device, &features);
-
-        if (are_features_suitable(features))
-        {
-            return device;
-        }
-    }
-
-    return VK_NULL_HANDLE;
-}
 
 static int pick_physical_device(project_app *app, VkInstance instance)
 {
@@ -127,9 +70,10 @@ static int pick_physical_device(project_app *app, VkInstance instance)
 
     vkEnumeratePhysicalDevices(instance, &device_count, devices);
 
-    debug_devices(devices, device_count);
-    app->vk_device = find_suitable_device(devices, device_count);
+    gpu_debug_devices(devices, device_count);
+    app->vk_device = gpu_find_suitable_device(devices, device_count);
 
+    free(devices); /* TODO: is this safe? */
     return 1;
 }
 
@@ -164,14 +108,18 @@ void app_graphics_setup(project_app *app)
     else
     {
         printf("%s: selected device\n", __func__);
-        debug_device(app->vk_device);
+        gpu_debug_device(app->vk_device);
     }
 
-    /* now we're just gonna say that's it, but in the real world, 
-     * we need to be able for the program and the user to automatically configure to their GPU device. 
-     * we can score for the best GPU when writing settings for the first time. */
+    /* TODO: queue families and pick logical device */
 
-    /* queue GPU families */
+    /*
+    if ()
+    {
+    }
+    */
+
+    /* TODO: link device to window? */
 
     printf("%s: setting up vk success\n", __func__);
 }
@@ -184,5 +132,5 @@ void app_graphics_cleanup(project_app *app)
     }
 
     vkDestroyInstance(app->vk_instance, NULL);
-    vkDestroyDevice(app->vk_device, NULL);
+    // vkDestroyDevice(logical device, NULL);
 }

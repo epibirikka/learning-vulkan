@@ -38,13 +38,13 @@ $(BUILD)/validation.o: $(SRC)/validation.c $(SRC)/validation.h
 	$(CC) -c -o $@ $< $(LIST_FLAGS)
 
 $(BUILD)/debugger.o: $(SRC)/debugger.c
-	$(CC) -c -o $@ $< $(LIST_FLAGS)
+	$(CC) -c -o $@ $^ $(LIST_FLAGS)
 
 $(BUILD)/extension.o: $(SRC)/extension.c
-	$(CC) -c -o $@ $< $(LIST_FLAGS)
+	$(CC) -c -o $@ $^ $(LIST_FLAGS)
 
 $(BUILD)/device.o: $(SRC)/device.c
-	$(CC) -c -o $@ $< $(LIST_FLAGS)
+	$(CC) -c -o $@ $^ $(LIST_FLAGS)
 
 .PHONY: clean
 clean:
