@@ -62,8 +62,18 @@ static LRESULT CALLBACK window_procedure(HWND window, UINT message, WPARAM word_
 {
     switch (message)
     {
+        case WM_SIZE:
+        {
+            POINT pt;
+            pt.x = GET_X_LPARAM(long_param);
+            pt.y = GET_Y_LPARAM(long_param);
+
+            printf("%s: WM_SIZE @ width=%ld, height=%ld\n", __func__, pt.x, pt.y);
+            app_handle_resize(app_from_hwnd(window), pt.x, pt.y);
+        }
+            return 0;
         case WM_DESTROY:
-            PostQuitMessage(0);
+            app_quit();
             return 0;
         case WM_LBUTTONDOWN:
         {

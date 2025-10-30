@@ -3,6 +3,7 @@
 #include "validation.h"
 #include "extension.h"
 
+#define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
 #include <stdio.h>
 
@@ -47,9 +48,9 @@ void debugger_setup(project_app *app)
         return;
     }
 
-    if (app->vk_instance == NULL)
+    if (app->vk_instance == VK_NULL_HANDLE)
     {
-        fprintf(stderr, "%s: app passed no vkinstance\n", __func__);
+        fprintf(stderr, "%s: app passed vkinstance of null handle\n", __func__);
         return;
     }
 
@@ -66,4 +67,27 @@ void debugger_setup(project_app *app)
     {
         fprintf(stderr, "%s: failed to create debug messenger\n", __func__);
     }
+}
+
+void debugger_free(project_app *app)
+{
+    if (app == NULL)
+    {
+        fprintf(stderr, "%s: app passed null handle\n", __func__);
+        return;
+    }
+
+    if (app->vk_instance == VK_NULL_HANDLE)
+    {
+        fprintf(stderr, "%s: app->vk_instance passed null handle\n", __func__);
+        return;
+    }
+
+    if (app->vk_messenger == VK_NULL_HANDLE)
+    {
+        fprintf(stderr, "%s: app->vk_messenger passed null handle\n", __func__);
+        return;
+    }
+
+    DestroyDebugUtilsMessengerEXT(app->vk_instance, app->vk_messenger, NULL);
 }

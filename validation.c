@@ -12,16 +12,18 @@ static int has_layer_property(const char *match_name, VkLayerProperties *propert
         return 0;
     }
 
+    /*
     for (size_t index=0; index<count; ++index)
     {
         printf("property: %s\n", properties[index].layerName);
     }
+    */
 
     for (size_t index=0; index<count; ++index)
     {
         if (!strcmp(match_name, properties[index].layerName))
         {
-            printf("found\n");
+            printf("%s: found it\n", __func__);
             return 1;
         }
     }
@@ -48,7 +50,7 @@ int graphics_check_validation_support()
 
     for (const char **string=VALIDATION_LAYERS_LIST; *string != NULL; string++)
     {
-        printf("testing: %s\n", *string);
+        printf("%s testing: %s\n", __func__, *string);
 
         if (has_layer_property(*string, properties, layer_count))
         {

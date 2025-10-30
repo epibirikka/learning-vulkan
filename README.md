@@ -2,10 +2,31 @@
 
 vulkan is a bitch
 
-- Win32 main lol with windows programming
+- Win32 main (lol) with windows programming
 - Header and source files split (why would you want to put everything in one main file?)
 
-# components
+## components
 
 - Instances
-- Validation layers (i'll save this for last. i don't have the sdk yet)
+- Validation layers
+- Swapchains 
+- Queues
+- Imageviews Framebuffers
+- Pipeline
+- Render pass (this will be replaced in favor of dynamic rendering)
+- Command buffers
+- Binary swapchains (those will be replaced in favor of timeline swapchains) and fences
+
+## notes
+
+there is so much technical debt in naming things, structuring the project, and making project decisions.
+
+## references
+- [vulkan-tutorial *(literally 7 years already)*](https://vulkan-tutorial.com)
+- [Official vulkan-tutorial](https://docs.vulkan.org/tutorial/latest)
+
+## building
+
+- build with MSYS2 because i made this with MSYS2 `(mingw-w64-x86_64)`. otherwise, your windows system should have `pkg-config`
+- get the vulkan SDK for vulkan headers and validation layers
+- if you have 

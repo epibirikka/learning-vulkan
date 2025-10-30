@@ -1,5 +1,6 @@
 #include "extension.h"
 
+#define VK_USE_PLATFORM_WIN32_KHR
 #include <vulkan/vulkan.h>
 #include <stdio.h>
 
@@ -30,4 +31,37 @@ void DestroyDebugUtilsMessengerEXT(VkInstance instance,
     {
         ((PFN_vkDestroyDebugUtilsMessengerEXT)(function))(instance, debug_messenger, allocator);
     }
+}
+
+
+static const char *extension_list[] = {
+    "VK_KHR_surface",
+    "VK_KHR_win32_surface"
+};
+
+static const char *device_extension_list[] = {
+    VK_KHR_SWAPCHAIN_EXTENSION_NAME,
+};
+
+static const size_t extension_count = ((sizeof(extension_list)/sizeof(extension_list[0])));
+static const size_t device_extension_count = ((sizeof(device_extension_list)/sizeof(device_extension_list[0])));
+
+void extension_instance_create_info_supplicate(VkInstanceCreateInfo *create_info)
+{
+    if (create_info == NULL) return;
+
+    create_info->enabledExtensionCount = extension_count;
+    create_info->ppEnabledExtensionNames = (extension_count <= 0) ? NULL : extension_list;
+    printf("%s: extension count: %d, extension names: %p\n", __func__, 
+           create_info->enabledExtensionCount, create_info->ppEnabledExtensionNames);
+}
+
+void extension_device_create_info_supplicate(VkDeviceCreateInfo *create_info)
+{
+    if (create_info == NULL) return;
+
+    create_info->enabledExtensionCount = device_extension_count;
+    create_info->ppEnabledExtensionNames = (device_extension_count <= 0) ? NULL : device_extension_list;
+    printf("%s: extension count: %d, extension names: %p\n", __func__, 
+           create_info->enabledExtensionCount, create_info->ppEnabledExtensionNames);
 }

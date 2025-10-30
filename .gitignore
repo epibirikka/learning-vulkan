@@ -1,4 +1,7 @@
 *.tar.xz
 *.tar.gz
 *.log
+*.spv
 .build
+future_project_structure.txt
+actual_future_project_structure.txt

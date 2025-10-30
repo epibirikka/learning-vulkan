@@ -1,5 +1,4 @@
 #include <stdio.h>
-
 #include "app.h"
 
 int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous_instance, 
@@ -7,6 +6,7 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous_instance,
 {
     project_app app = {};
 
+    app.hinstance = instance;
     app.window = app_create_window(&app, instance, 800, 600);
 
     if (app.window == NULL)
@@ -15,16 +15,38 @@ int WINAPI WinMain(HINSTANCE instance, HINSTANCE previous_instance,
         return 1;
     }
 
+    SetWindowText(app.window, "rainbow triangle program");
+
     ShowWindow(app.window, cmdshow);
     app_graphics_setup(&app);
+
+    if (!app.graphics_up)
+    {
+        fprintf(stderr, "%s: quitting because the graphics weren't setup properly\n", __func__);
+        return 1;
+    }
+
     app_setup_loop(app.window, &app);
 
     MSG msg = {};
 
-    while (GetMessage(&msg, NULL, 0, 0) > 0)
+    int tick = 0;
+
+
+    while (WM_QUIT != msg.message)
     {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
+        if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+        }
+        else
+        {
+            /* game tick */
+
+            /* game display */
+            app_graphics_frame(&app);
+        }
     }
 
     app_graphics_cleanup(&app);
