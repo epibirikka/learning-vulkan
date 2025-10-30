@@ -27,6 +27,5 @@ there is so much technical debt in naming things, structuring the project, and m
 
 ## building
 
-- build with MSYS2 because i made this with MSYS2 `(mingw-w64-x86_64)`. otherwise, your windows system should have `pkg-config`
+- build with MSYS2 `(mingw-w64-x86_64)` because the makefile has `pkg-config`. otherwise, your environment should have `pkg-config` installed.
 - get the vulkan SDK for vulkan headers and validation layers
-- if you have 
